@@ -79,11 +79,8 @@ useEffect(() => {
   return (
     <MyAcces.Provider
       value={{
-        // access
         hasAcces,
         setHasAcces,
-
-        // topics
         topics,
         setTopics,
         checker,
@@ -92,7 +89,6 @@ useEffect(() => {
         setChecker,
         verifyKey,
         clearKey,
-        // navigation
         selectedTopicIndex,
         setSelectedTopicIndex,
         currentIndex,

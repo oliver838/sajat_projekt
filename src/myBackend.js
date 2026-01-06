@@ -105,14 +105,12 @@ export const getTopic = (setTopics) => {
             topicsArray.push({ topicName, questions });
           }
 
-          // 🔥 EZ frissíti a UI-t törléskor is
           setTopics([...topicsArray]);
         });
 
         unsubscribes.push(unsubscribeQuestions);
       });
 
-      // cleanup
       return () => {
         unsubscribes.forEach((u) => u());
       };
@@ -133,17 +131,14 @@ export const deleteTopicWithQuestions = async (topicName) => {
     const topicRef = doc(db, "topics", topicName);
     const questionsRef = collection(topicRef, "questions");
 
-    // 1️⃣ összes kérdés lekérése
     const questionsSnap = await getDocs(questionsRef);
 
-    // 2️⃣ kérdések törlése
     const deletePromises = questionsSnap.docs.map((q) =>
       deleteDoc(q.ref)
     );
 
     await Promise.all(deletePromises);
 
-    // 3️⃣ topic törlése
     await deleteDoc(topicRef);
 
     console.log(`Topic teljesen törölve: ${topicName}`);
