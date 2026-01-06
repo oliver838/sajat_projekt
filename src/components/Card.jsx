@@ -28,9 +28,7 @@ export const Card = ({ obj }) => {
             </figure>
 
             <div className="szoveg">{obj.kerdes}</div>
-            {hasAcces && (
-                <button className="le" onClick={handleCardAdd}><CiEdit /></button>
-            )}
+        
           </div>
 
           <div className="card-back">
@@ -41,7 +39,15 @@ export const Card = ({ obj }) => {
             </figure>
 
             <div className="szoveg">{obj.valasz}</div>
-            <button className="le"><CiStop1 /></button>
+            <div className="le">
+               {hasAcces && (
+                <button  onClick={handleCardAdd}><CiEdit /></button>
+            )}
+              <button ><CiStop1 /></button>
+
+            </div>
+            
+               
 
           </div>
         </div>

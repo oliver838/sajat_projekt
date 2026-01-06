@@ -20,8 +20,11 @@ export const CardAdd = ({ cardChange }) => {
     setSelected(value);
     setOpen(false);
   };
+const UpperAlkitas = (value) => {
+  if (!value) return "";
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+};
 
-  // 👉 ha van card, betöltjük szerkesztéshez
   useEffect(() => {
     if (!card) return;
 
@@ -76,7 +79,8 @@ export const CardAdd = ({ cardChange }) => {
                   className="inputFields"
                   placeholder="Tipus"
                   value={selected}
-                  onChange={(e) => setSelected(e.target.value)}
+                  onChange={(e) => setSelected(UpperAlkitas(e.target.value))}
+
                   required
                 />
               </li>

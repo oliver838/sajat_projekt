@@ -1,5 +1,5 @@
 
-import { collection, doc, setDoc, addDoc, getDoc, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, doc, setDoc, addDoc, getDoc, getDocs, onSnapshot, deleteDoc } from "firebase/firestore";
 import { db } from "./fireBaseApp";
 
 export const addTopicWithQuestion = async (item) => {
@@ -53,43 +53,101 @@ export const updateCard = async (card, item) => {
     console.error("Hiba a kérdés frissítésekor:", error);
   }
 };
+export const deleteCard = async (card) => {
+  try {
+    if (!card || !card.id || !card.selected) {
+      throw new Error("Hiányzó card adat a törléshez!");
+    }
 
+    const topicName = card.selected;
+
+    const questionDocRef = doc(
+      db,
+      "topics",
+      topicName,
+      "questions",
+      card.id
+    );
+
+    await deleteDoc(questionDocRef);
+
+    console.log("Kártya törölve:", card.id);
+  } catch (error) {
+    console.error("Hiba a kártya törlésekor:", error);
+  }
+};
 
 export const getTopic = (setTopics) => {
   try {
     const topicsRef = collection(db, "topics");
 
-    const unsubscribe = onSnapshot(topicsRef, async (topicsSnapshot) => {
-      if (topicsSnapshot.empty) {
-        setTopics([]);
-        return;
-      }
-
+    const unsubscribeTopics = onSnapshot(topicsRef, (topicsSnapshot) => {
       const topicsArray = [];
+      const unsubscribes = [];
 
-      for (const topicDoc of topicsSnapshot.docs) {
+      topicsSnapshot.docs.forEach((topicDoc) => {
         const topicName = topicDoc.id;
-
         const questionsRef = collection(topicDoc.ref, "questions");
 
-        const questionsSnapshot = await new Promise((resolve) =>
-          onSnapshot(questionsRef, resolve)
-        );
+        const unsubscribeQuestions = onSnapshot(questionsRef, (questionsSnap) => {
+          const questions = questionsSnap.docs.map((q) => ({
+            id: q.id,
+            ...q.data(),
+          }));
 
-        const questions = questionsSnapshot.docs.map((q) => ({
-          id: q.id,
-          ...q.data(),
-        }));
+          const index = topicsArray.findIndex(
+            (t) => t.topicName === topicName
+          );
 
-        topicsArray.push({ topicName, questions });
-      }
+          if (index !== -1) {
+            topicsArray[index].questions = questions;
+          } else {
+            topicsArray.push({ topicName, questions });
+          }
 
-      setTopics(topicsArray);
+          // 🔥 EZ frissíti a UI-t törléskor is
+          setTopics([...topicsArray]);
+        });
+
+        unsubscribes.push(unsubscribeQuestions);
+      });
+
+      // cleanup
+      return () => {
+        unsubscribes.forEach((u) => u());
+      };
     });
 
-    return unsubscribe;
+    return unsubscribeTopics;
   } catch (error) {
     console.error("Hiba a topicok figyelésekor:", error);
   }
 };
 
+export const deleteTopicWithQuestions = async (topicName) => {
+  try {
+    if (!topicName) {
+      throw new Error("Topic név hiányzik!");
+    }
+
+    const topicRef = doc(db, "topics", topicName);
+    const questionsRef = collection(topicRef, "questions");
+
+    // 1️⃣ összes kérdés lekérése
+    const questionsSnap = await getDocs(questionsRef);
+
+    // 2️⃣ kérdések törlése
+    const deletePromises = questionsSnap.docs.map((q) =>
+      deleteDoc(q.ref)
+    );
+
+    await Promise.all(deletePromises);
+
+    // 3️⃣ topic törlése
+    await deleteDoc(topicRef);
+
+    console.log(`Topic teljesen törölve: ${topicName}`);
+  } catch (error) {
+    console.error("Hiba a topic törlésekor:", error);
+  }
+};
