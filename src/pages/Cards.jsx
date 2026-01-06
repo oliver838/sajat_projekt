@@ -12,8 +12,9 @@ export const Cards = () => {
     setSelectedTopicIndex,
     currentIndex,
     setCurrentIndex,
+    card,
+    setCard,
   } = useContext(MyAcces);
-
 
   const selectedQuestions = topics[selectedTopicIndex]?.questions || [];
 
@@ -34,6 +35,9 @@ export const Cards = () => {
     );
   };
 
+  useEffect(() => {
+    setCard(null);
+  }, []);
   return (
     <div className="cards">
       {topics && (
@@ -51,10 +55,14 @@ export const Cards = () => {
           <>
             <Card
               key={currentIndex}
-              obj={selectedQuestions[currentIndex]}
+              obj={{
+                ...selectedQuestions[currentIndex],
+                selected: topics[selectedTopicIndex].topicName || "", 
+              }}
               onNext={next}
               onPrev={prev}
             />
+
             {
               <>
                 <p>

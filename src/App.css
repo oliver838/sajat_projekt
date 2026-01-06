@@ -8,33 +8,31 @@
 
 @import url('https://fonts.googleapis.com/css?family=Lato');
 
-/* default */
 *,
-*::after,
-*::before {
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* body */
-body {
-  min-height: 100vh;
-  padding: 40px;
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-
-  background: hsl(220, 10%, 12%);
-  font-family: "Lato", "Segoe Ui", -apple-system, BlinkMacSystemFont, sans-serif;
-}
 html, body, #root {
   width: 100%;
   height: 100%;
-  margin: 0;
-  padding: 0;
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #f5f5f5;
+  overflow-x: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+  line-height: 1.6;
 }
 
 
@@ -84,6 +82,9 @@ html, body, #root {
   overflow: hidden;
 
   backface-visibility: hidden;
+  word-break: break-all;
+  padding: 15px;
+  word-wrap: break-word;
 
   display: flex;
   justify-content: center;
@@ -232,128 +233,54 @@ li:not(:last-child)::after {
 /* button */
 button {
   font-family: inherit;
-  font-weight: bold;
-  color: var(--white-1);
-
-  letter-spacing: 2px;
-
-  padding: 9px 20px;
-  border: 1px solid var(--grey);
-  border-radius: 1000px;
-  background: transparent;
-  transition: .3s;
-
+  font-weight: 700;
+  font-size: 16px;
+  padding: 12px 24px;
+  border-radius: 50px;
+  border: none;
   cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #5bac8b, #3a8d7e);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
 
-button:hover,
-button:focus {
-  color: var(--primary);
-  background: hsla(var(--hue), 25%, 10%, .2);
-  border-color: currentColor;
+button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255,255,255,0.15);
+  transform: rotate(45deg);
+  transition: all 0.5s;
+}
+
+button:hover::after {
+  top: -20%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+}
+
+button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.5);
 }
 
 button:active {
-  transform: translate(2px);
+  transform: scale(0.95);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
 }
 
-/* .design-container */
-.design-container {
-  --tr: 90;
-  --op: .5;
 
-  width: 100%;
-  height: 100%;
-
-  background: transparent;
+.le{
   position: absolute;
-  top: 0;
-  left: 0;
-
-  pointer-events: none;
-}
-
-/* .design */
-.design {
-  display: block;
-
-  background: var(--grey);
-  position: absolute;
-
-  opacity: var(--op);
-  transition: .3s;
-}
-
-.design--1,
-.design--2,
-.design--3,
-.design--4 {
-  width: 1px;
-  height: 100%;
-}
-
-.design--1,
-.design--2 {
-  top: 0;
-  transform: translateY(calc((var(--tr) - (var(--tr) * 2)) * 1%))
-}
-
-.design--1 {
-  left: 20%;
-}
-
-.design--2 {
-  left: 80%;
-}
-
-.design--3,
-.design--4 {
-  bottom: 0;
-  transform: translateY(calc((var(--tr) + (var(--tr) - var(--tr))) * 1%))
-}
-
-.design--3 {
-  left: 24%;
-}
-
-.design--4 {
-  left: 76%;
-}
-
-.design--5,
-.design--6,
-.design--7,
-.design--8 {
-  width: 100%;
-  height: 1px;
-}
-
-.design--5,
-.design--6 {
-  left: 0;
-  transform: translateX(calc((var(--tr) - (var(--tr) * 2)) * 1%));
-}
-
-.design--5 {
-  top: 41%;
-}
-
-.design--6 {
-  top: 59%;
-}
-
-.design--7,
-.design--8 {
-  right: 0;
-  transform: translateX(calc((var(--tr) + (var(--tr) - var(--tr))) * 1%))
-}
-
-.design--7 {
-  top: 44%;
-}
-
-.design--8 {
-  top: 56%;
+  right: 10px;
+  bottom: 10px;
 }
 
 /* states */
@@ -394,53 +321,36 @@ button:focus+.design-container {
   color: wheat;
 }
 
+.topic-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 40px;
+}
+
 .topic-buttons button {
-  font-family: 'Lato', sans-serif;
+  min-width: 150px;
+  text-align: center;
+}
+.cards-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gombok {
+  display: flex;
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.gombok button {
+  background-color: rgba(255, 255, 255, 0.7);
+  color: #222;
   font-weight: 700;
-  font-size: 20px;
-  color: #ffffff;
-  padding: 16px 20px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(135deg, #5bac8b, #3a8d7e);
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-  position: relative;
-  overflow: hidden;
-
-  min-width: 150px; /* <-- ide kerüljön */
-  text-align: center; /* középre igazítja a szöveget */
-}
-
-
-.topic-buttons button::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: rgba(255,255,255,0.15);
-  transform: rotate(45deg);
-  transition: all 0.5s;
-}
-
-.topic-buttons button:hover::after {
-  top: -20%;
-  left: -20%;
-  width: 140%;
-  height: 140%;
-}
-
-.topic-buttons button:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 12px 25px rgba(0,0,0,0.5);
-}
-
-.topic-buttons button:active {
-  transform: scale(0.95);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+  padding: 12px 18px;
 }
 
 .cards-list{
@@ -448,66 +358,53 @@ button:focus+.design-container {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  .gombok{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    button{
-      padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.673);
-    }
-  }
+  
+  
 }
 }
 
 
 
 
-
+.footer-div{
+  display: flex;
+  gap: 10px;
+}
 .footer {
   position: absolute;
   bottom: 0;
   right: 0;
   width: fit-content;
   height: fit-content;
-  margin: 30px;
+  margin: 25px;
 
-  button {
-    width: 165px;
-    height: 62px;
-    cursor: pointer;
-    color: #fff;
-    font-size: 17px;
-    border-radius: 1rem;
-    border: none;
-    position: relative;
-    background: #100720;
-    transition: 0.1s;
-  }
-
-  button::after {
-    content: '';
-    width: 100%;
-    height: 100%;
-    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgb(91, 172, 139) 17.8%, rgb(131, 118, 62) 100.2% );
-    filter: blur(15px);
-    z-index: -1;
-    position: absolute;
-    left: 0;
-    top: 0;
-  }
-
-  button:active {
-    transform: scale(0.9) rotate(3deg);
-    background: radial-gradient( circle farthest-corner at 10% 20%,  rgba(91, 172, 139,1) 17.8%, rgba(131, 118, 62,1) 100.2% );
-    transition: 0.5s;
-  }
 }
+.footer button {
+  position: relative;
+  overflow: hidden;
+  background: #100720;
+  transition: transform 0.2s ease;
+}
+
+.footer button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle farthest-corner at 10% 20%, rgba(91,172,139,1) 17.8%, rgba(131,118,62,1) 100.2%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 0;
+}
+
+.footer button:active::after {
+  opacity: 1;
+}
+
+.footer button span {
+  position: relative; /* szöveg fölé */
+  z-index: 1;
+}
+
 
 .cardadd{
   @import url(https://fonts.googleapis.com/css?family=Open+Sans:300);
@@ -654,3 +551,5 @@ button:focus+.design-container {
 }
 
 }
+
+

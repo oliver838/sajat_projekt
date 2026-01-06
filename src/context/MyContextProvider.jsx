@@ -8,8 +8,18 @@ export const MyContextProvider = ({ children }) => {
 
   const [hasAcces, setHasAcces] = useState(false);
   const [loading,setLoading] = useState(true)
-
+  const [checker, setChecker] = useState(false)
   const [topics, setTopics] = useState([]);
+  const [card, setCard] = useState(() => {
+  const saved = localStorage.getItem("card");
+  return saved ? JSON.parse(saved) : null;
+});
+useEffect(() => {
+  if (card !== null) {
+    localStorage.setItem("card", JSON.stringify(card));
+  }
+}, [card]);
+
   const [selectedTopicIndex, setSelectedTopicIndex] = useState(
     () => Number(localStorage.getItem("selectedTopicIndex")) || 0
   );
@@ -18,10 +28,15 @@ export const MyContextProvider = ({ children }) => {
   );
 
   useEffect(() => {
+
     const unsubscribe = getTopic(setTopics);
     return () => unsubscribe && unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = getTopic(setTopics);
+    return () => unsubscribe && unsubscribe();
+  }, [checker]);
   useEffect(()=>{
     const checkAuth = async ()=>{
         try {
@@ -71,6 +86,10 @@ export const MyContextProvider = ({ children }) => {
         // topics
         topics,
         setTopics,
+        checker,
+        card,
+        setCard,
+        setChecker,
         verifyKey,
         clearKey,
         // navigation

@@ -36,7 +36,6 @@ export const MyModal = () => {
     setPassword("")
   };
   const [password,setPassword] = useState("");
-  console.log(hasAcces);
   
 const handleLogin = async (e) => {
   e.preventDefault(); 

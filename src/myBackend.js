@@ -24,6 +24,37 @@ export const addTopicWithQuestion = async (item) => {
         }
 
 };
+export const updateCard = async (card, item) => {
+  try {
+    if (!card || !card.id || !card.selected) {
+      throw new Error("Card vagy topicName hiányzik!");
+    }
+
+    const topicName = card.selected;
+    const kerdes = item.kerdes;
+    const valasz = item.valasz;
+
+    const questionDocRef = doc(
+      db,
+      "topics",
+      topicName,
+      "questions",
+      card.id
+    );
+
+    await setDoc(
+      questionDocRef,
+      { kerdes, valasz },
+      { merge: true }
+    );
+
+    console.log("Kérdés frissítve:", card.id);
+  } catch (error) {
+    console.error("Hiba a kérdés frissítésekor:", error);
+  }
+};
+
+
 export const getTopic = (setTopics) => {
   try {
     const topicsRef = collection(db, "topics");
